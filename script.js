@@ -1,6 +1,7 @@
 
 let itemsArray = localStorage.getItem("items") ? JSON.parse(localStorage.getItem("items")) : [];
 const outputInfo = document.getElementById('output-info')
+const paginationBtn = document.querySelectorAll('button')
 
 async function fetchTodos() {
     const res = await fetch('https://jsonplaceholder.typicode.com/todos');
@@ -29,11 +30,24 @@ const renderTodos = (arr) => {
 
 }
 
+function paginationPage(page) {
+    const pageNumber = itemsArray.filter(item => item.userId === page)
+    renderTodos(pageNumber);
+    paginationBtn.forEach(elem => elem.removeEventListener('click', paginationPage))
+}
+
+function pagination() {
+    paginationBtn.forEach(elem => {
+        elem.addEventListener('click', (e) => paginationPage(Number(e.target.value)));
+    })
+}
+
 function deleteItem() {
     let deleteBtn = document.querySelectorAll('.fa-trash');
     deleteBtn.forEach((todo, i) => {
         todo.addEventListener('click', () => deleteTodo(i));
     })
+    deleteBtn.forEach (todo => todo.removeEventListener('click', deleteTodo))
 }
 
 
@@ -41,7 +55,8 @@ function deleteTodo(id) {
     itemsArray.splice(id, 1);
     localStorage.removeItem('items')
     localStorage.setItem('items', JSON.stringify(itemsArray));
-    location.reload()
+    // location.reload()
+    renderTodos(itemsArray)
 }
 
 
@@ -98,6 +113,7 @@ const onceFetch = () => {
 
 window.onload = function() {
     onceFetch()
-    renderTodos(itemsArray)
+    renderTodos(itemsArray.slice(0, 20))
     searchValue()
+    pagination()
 }

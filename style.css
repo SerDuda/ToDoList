@@ -93,3 +93,33 @@ body {
     text-decoration: line-through;
     background: rgb(151, 151, 151);
 }
+
+.pagination {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    margin: 20px auto;
+}
+
+button {
+    margin: 0 5px;
+    padding: 15px;
+    width: 25px;
+    height: 25px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 5px;
+    border-color: transparent;
+    background:  rgb(212, 212, 212);
+    font-size: 18px;
+}
+
+button:hover {
+    color: #fff;
+    background: rgb(145, 145, 145);
+    box-shadow: 0px 0px 10px 7px rgb(145, 145, 145);
+    cursor: pointer;
+    transition: ease .4s;
+}
