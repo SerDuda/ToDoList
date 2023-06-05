@@ -25,8 +25,8 @@ const renderTodos = (arr) => {
         </div>`
     })
     outputInfo.innerHTML = items
-    deleteItem()
-    toggleCompleted()
+    deleteItemFromList()
+    toggleItem()
 
 }
 
@@ -42,44 +42,47 @@ function pagination() {
     })
 }
 
-function deleteItem() {
-    let deleteBtn = document.querySelectorAll('.fa-trash');
-    deleteBtn.forEach((todo, i) => {
-        todo.addEventListener('click', () => deleteTodo(i));
-    })
-    deleteBtn.forEach (todo => todo.removeEventListener('click', deleteTodo))
-}
-
-
-function deleteTodo(id) {
-    itemsArray.splice(id, 1);
-    localStorage.removeItem('items')
-    localStorage.setItem('items', JSON.stringify(itemsArray));
-    // location.reload()
-    renderTodos(itemsArray)
-}
-
-
-function toggleCompleted() {
-    let checkedTodo = document.querySelectorAll('.fa-pen-to-square')
-    
-    checkedTodo.forEach((elem, idx) => {
-        elem.addEventListener('click', () => toggleElem(idx))
-    })
-}
-
-function toggleElem(idx) {
-    if (itemsArray) {
-        itemsArray = itemsArray.map((item, i) => {
-            return {
-                ...item,
-                completed: i === idx ? !item.completed : item.completed
-            }
+function deleteItemFromList() {
+    const deleteBtn = document.querySelectorAll('.fa-trash');
+    function deleteItem() {
+        deleteBtn.forEach((todo, i) => {
+            todo.addEventListener('click', () => deleteTodo(i));
         })
     }
+    deleteItem()
+    
+    function deleteTodo(id) {
+        itemsArray.splice(id, 1);
+        localStorage.removeItem('items')
+        localStorage.setItem('items', JSON.stringify(itemsArray));
+        // location.reload()
+        renderTodos(itemsArray.slice(0, 20))
+        deleteBtn.forEach(elem => elem.removeEventListener('click', deleteTodo))
+    }
+}
 
-    localStorage.setItem('items', JSON.stringify(itemsArray));
-    renderTodos(itemsArray)
+function toggleItem() {
+    const checkedTodo = document.querySelectorAll('.fa-pen-to-square')
+    function toggleCompleted() {
+        checkedTodo.forEach((elem, idx) => {
+            elem.addEventListener('click', () => toggleElem(idx))
+        })
+    }
+    toggleCompleted()
+
+    function toggleElem(idx) {
+        if (itemsArray) {
+            itemsArray = itemsArray.map((item, i) => {
+                return {
+                    ...item,
+                    completed: i === idx ? !item.completed : item.completed
+                }
+            })
+        }
+        localStorage.setItem('items', JSON.stringify(itemsArray));
+        renderTodos(itemsArray.slice(0, 20))
+        checkedTodo.forEach(elem => elem.removeEventListener('click', toggleElem))
+    }
 }
 
 
